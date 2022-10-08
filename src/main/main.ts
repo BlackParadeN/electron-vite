@@ -1,11 +1,13 @@
-import { app, BrowserWindow } from "electron"
+import { app, BrowserWindow, ipcMain } from "electron"
+
+const path = require('path')
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
-      // preload: path.join(__dirname, "preload.js"),
+      preload: path.join(__dirname, 'preload.js')
     },
   });
 
@@ -19,6 +21,10 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
+  ipcMain.handle('echo', (event, msg) => {
+    console.log("from render: ", msg);
+    return msg;
+  })
   createWindow();
 
   app.on("activate", function () {
