@@ -2,10 +2,15 @@
   "name": "electron-vite",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
+  "packageManager": "pnpm@7.12.0",
+  "main": "dist/main.js",
   "scripts": {
-    "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build",
+    "dev": "concurrently \"pnpm dev:render\" \"pnpm dev:main\"",
+    "dev:render": "vite",
+    "dev:main": "pnpm build:main && electron .",
+    "build": "pnpm build:render && pnpm build:main && electron-builder",
+    "build:render": "vue-tsc --noEmit && vite build",
+    "build:main": "tsc -p src/main --outDir dist",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -13,8 +18,17 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^3.1.0",
+    "concurrently": "^7.4.0",
+    "electron": "^21.0.1",
+    "electron-builder": "^23.6.0",
     "typescript": "^4.6.4",
     "vite": "^3.1.0",
     "vue-tsc": "^0.40.4"
+  },
+  "build": {
+    "appId": "hyperion.bpn",
+    "directories": {
+      "output": "build"
+    }
   }
 }
