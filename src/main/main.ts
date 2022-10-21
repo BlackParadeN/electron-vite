@@ -1,4 +1,5 @@
 import { app, BrowserWindow, ipcMain } from "electron"
+import test from "./db/Sqlite3"
 
 const path = require('path')
 
@@ -21,8 +22,9 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
-  ipcMain.handle('echo', (event, msg) => {
+   ipcMain.handle('echo', (event, msg) => {
     console.log("from render: ", msg);
+    test()
     return msg;
   })
   createWindow();
